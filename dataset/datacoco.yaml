@@ -1,0 +1,8 @@
+train: C:/Projects/PythonProject/dataset_zebra/train/images
+val: C:/Projects/PythonProject/dataset_zebra/val/images
+
+train_annotations: C:/Projects/PythonProject/dataset_zebra/train/labels
+val_annotations: C:/Projects/PythonProject/dataset_zebra/val/labels
+
+nc: 23
+names: [alko, chai, divan, doska, doska1, golova2, korzina, krujka, lojka, noj, rebra, ruka, salat1, salat2, salfetka_bel, salfetka_roz, sous, stol, stul, sup1, sup2, telefon, vilka]
