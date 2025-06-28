@@ -1,0 +1,65 @@
+from ultralytics import YOLO
+
+if __name__ == '__main__':
+    # Load a COCO-pretrained YOLO11n model
+    model = YOLO("yolo11x.pt")
+
+    # Train the model on the COCO8 example dataset for 100 epochs
+    results = model.train(data="datacoco.yaml", epochs=350, imgsz=2048, batch=2, workers=4)
+
+from ultralytics import YOLO
+import glob
+
+
+def run_inference():
+    # Загрузка предобученной модели
+    model = YOLO("best_box_350ep.pt")
+
+    # Определение пути к изображениям
+    source = "C:/Users/PC/Documents/zebra/test_video/*.MOV"
+
+    # Получение списка всех JPG файлов
+    image_files = glob.glob(source)
+
+    # Параметры вывода
+    config = {
+        'conf': 0.25,  # Порог уверенности (можно регулировать 0.1-0.9)
+        'imgsz': 2048,  # Размер изображения (лучше использовать тот же, что при обучении)
+        'iou': 0.45,  # Порог IoU для NMS (0.4-0.6 оптимально)
+        'save': True,  # Сохранять результаты
+        'save_txt': False,  # Сохранять аннотации в txt
+        'save_conf': True,  # Сохранять уверенность в файлы аннотаций
+        'save_crop': False,  # Вырезать обнаруженные объекты
+        'show': False,  # Показывать результаты в реальном времени
+        'project': 'runs/detect',  # Папка для сохранения
+        'name': 'predict',  # Имя подпапки
+        'exist_ok': True  # Перезаписывать предыдущие результаты
+    }
+
+    # Обработка каждого изображения
+    for image_path in image_files:
+        results = model.predict(
+            source=image_path,
+            conf=config['conf'],
+            imgsz=config['imgsz'],
+            iou=config['iou'],
+            save=config['save'],
+            save_txt=config['save_txt'],
+            save_conf=config['save_conf'],
+            save_crop=config['save_crop'],
+            show=config['show'],
+            project=config['project'],
+            name=config['name'],
+            exist_ok=config['exist_ok']
+        )
+
+        # Вывод информации о результате
+        for result in results:
+            print(f"\nРезультаты для {image_path}:")
+            print(f"Обнаружено объектов: {len(result.boxes)}")
+            print(f"Классы: {result.boxes.cls}")
+            print(f"Уверенность: {result.boxes.conf}")
+
+
+if __name__ == '__main__':
+    run_inference()
